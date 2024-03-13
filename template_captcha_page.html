@@ -150,7 +150,7 @@
                 <div style="font-size: 1.2rem">Monocle</div>
             </div>
         </a>
-        <div class="loading">Testing your connection</div>
+        <div class="loading" id="connectionStatus">Testing your connection</div>
         <div class="terms">
             See our
             <a href="https://spur.us/terms/monocle" target="_blank" referrerpolicy="none">Terms</a>
@@ -197,7 +197,7 @@
 
                         window.location.href = uri; // Redirect to the home page on success
                     } else {
-                        alert('Captcha validation failed. Please try again.');
+                        document.getElementById('connectionStatus').textContent = 'Captcha validation failed. Please disconnect from any VPNs or proxies and try again.';
                     }
                 })
                 .catch(error => {
