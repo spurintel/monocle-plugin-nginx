@@ -1,6 +1,5 @@
 function checkCookieAndCaptcha(r) {
     var cookie = r.headersIn.Cookie;
-    ngx.log(1, cookie);
     // Check if the secure cookie is present and valid
     if (cookie && cookie.includes("MCLVALID")) {
         // Implement your logic to validate the cookie value
@@ -40,9 +39,7 @@ function validateCaptcha(r) {
         }
         return response.json();
     }).then(data => {
-        // let clientIpAddress = r.remoteAddress;
-        // For testing, make sure our IP address matches the bundle
-        let clientIpAddress = data.ip;
+        let clientIpAddress = r.remoteAddress;
 
         // Parse the timestamp from the response
         let responseTime = new Date(data.ts);
@@ -59,7 +56,15 @@ function validateCaptcha(r) {
             return;
             // The time is within 5 seconds, proceed with further logic
         }
-        if (data.ip == clientIpAddress && !data.anon) {
+        if (r.variables.blockVPNs !== "false" && data.anon && data.vpn) {
+            r.return(403, "Blocking access from VPNs");
+            return
+        }
+        if (r.variables.blockProxies !== "false" && data.anon && data.proxy) {
+            r.return(403, "Blocking access from VPNs");
+            return
+        }
+        if (r.variables.testLocalhost !== "false" || data.ip == clientIpAddress) {
             setSecureCookie(r);
             r.return(200);
         } else {
