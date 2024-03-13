@@ -89,6 +89,11 @@
             width: 200px;
         }
 
+        .loading-no-animation {
+            text-align: left;
+            width: 200px;
+        }
+
         .terms {
             margin: 2rem;
             font-size: 0.8rem;
@@ -197,7 +202,9 @@
 
                         window.location.href = uri; // Redirect to the home page on success
                     } else {
-                        document.getElementById('connectionStatus').textContent = 'Captcha validation failed. Please disconnect from any VPNs or proxies and try again.';
+                        const connectionStatus = document.getElementById('connectionStatus');
+                        connectionStatus.textContent = 'Captcha validation failed. Please disconnect from any VPNs or proxies and try again.';
+                        connectionStatus.className = 'loading-no-animation'
                     }
                 })
                 .catch(error => {
