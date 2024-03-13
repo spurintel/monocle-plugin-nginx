@@ -17,5 +17,6 @@ COPY template_captcha_page.html /templates/captcha_page.html
 RUN chmod a+rx /sbin/entrypoint.sh
 
 EXPOSE 80
+EXPOSE 443
 
 CMD ["/sbin/entrypoint.sh"]
