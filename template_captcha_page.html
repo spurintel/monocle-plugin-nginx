@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captcha Validation</title>
+    <style>
+        #spinner {
+            display: block;
+            /* Show spinner initially */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="spinner">Loading...</div>
+    <script
+        src="https://mcl.spur.us/d/mcl.js?tk={SITE_TOKEN}">
+        </script>
+    <script>
+        // Function to handle the captcha data submission
+        function submitCaptchaData(data) {
+            fetch('/validate_captcha', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ captchaData: data }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        var urlParams = new URLSearchParams(window.location.search);
+                        var uri = urlParams.get('uri');
+                        
+                        window.location.href = uri; // Redirect to the home page on success
+                    } else {
+                        alert('Captcha validation failed. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during captcha validation:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        }
+
+
+
+        // Initialize or reset the submission flag when appropriate
+        // window.bundleSubmitted = false;
+
+        if (window.MCL) {
+            MCL.configure({
+                onBundle: function (b) {
+                    console.log("on bundle");
+                    document.getElementById('spinner').style.display = 'none';
+                    submitCaptchaData(b);
+                }
+            })
+        } else {
+            console.error('MCL script not loaded');
+            alert('Captcha loading failed. Please refresh the page.');
+        }
+    </script>
+</body>
+
+</html>
