@@ -38,6 +38,8 @@ Variables to set:
     * By default, we do not block anything. Set this to block VPN services such as Mullvad, NordVPN, etc.
 5. `BLOCK_PROXIES`
     * By default, we do not block anything. Set this to block all proxies whether they are datacenter, residential, mobile, or malware.
+6. `RESOLVER`
+    * By default, this is set to `1.1.1.1`. However, if you plan to include this within a docker network, you will need to set it to the local docker resolver. On `mclproxy.com`, this is set to `127.0.0.11`.
 
 Specifying certificates is completely optional. If you do not specify certificates, NGINX will start on port 80 and serve insecure traffic. Adjust the port you use accordingly.
 
