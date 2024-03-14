@@ -27,23 +27,23 @@ support@spur.us
 
 Variables to set:
 
-1. PROXY_PASS
+1. `PROXY_PASS`
     * Location that should be set for the NGINX proxy_pass variable
     * Example: https://spur.us
-2. SITE_TOKEN
+2. `SITE_TOKEN`
     * The site token provided to you when you create a new Monocle deployment within the Spur dashboard
-3. VERIFY_TOKEN
+3. `VERIFY_TOKEN`
     * This is the verification token provided by Spur. It is required that you select Spur managed encryption when creating the deployment
-4. BLOCK_VPNS
+4. `BLOCK_VPNS`
     * By default, we do not block anything. Set this to block VPN services such as Mullvad, NordVPN, etc.
-5. BLOCK_PROXIES
+5. `BLOCK_PROXIES`
     * By default, we do not block anything. Set this to block all proxies whether they are datacenter, residential, mobile, or malware.
 
 Specifying certificates is completely optional. If you do not specify certificates, NGINX will start on port 80 and serve insecure traffic. Adjust the port you use accordingly.
 
 There is one optional parameter for testing locally.
 
-1. TEST_LOCALHOST
+1. `TEST_LOCALHOST`
     * Setting this value to `true` will allow localhost connections that might mismatch the IP address in the bundle. This should absolutely not be set in a production environment.
 
 ### Frequently Asked Questions
