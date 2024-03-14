@@ -4,11 +4,13 @@
 : ${BLOCK_PROXIES:=false}
 : ${BLOCK_VPNS:=false}
 : ${TEST_LOCALHOST:=false}
+: ${RESOLVER:=1.1.1.1}
 
 # Export the variables so they can be used with envsubst
 export BLOCK_PROXIES
 export BLOCK_VPNS
 export TEST_LOCALHOST
+export RESOLVER
 
 sed "s/{SITE_TOKEN}/$SITE_TOKEN/g" /templates/captcha_page.html > /local-content/captcha_page.html
 export COOKIE_SECRET=$(uuidgen)
@@ -27,6 +29,6 @@ else
 fi
 
 # Use environment variables to substitute placeholders in the NGINX config template
-envsubst '${TEST_LOCALHOST} ${LISTEN_CFG} ${VERIFY_TOKEN} ${COOKIE_SECRET} ${PROXY_PASS} ${BLOCK_PROXIES} ${BLOCK_VPNS} ${SSL_CERT} ${SSL_KEY}' < /etc/nginx/templates/nginx.conf.template > /etc/nginx/nginx.conf
+envsubst '${RESOLVER} ${TEST_LOCALHOST} ${LISTEN_CFG} ${VERIFY_TOKEN} ${COOKIE_SECRET} ${PROXY_PASS} ${BLOCK_PROXIES} ${BLOCK_VPNS} ${SSL_CERT} ${SSL_KEY}' < /etc/nginx/templates/nginx.conf.template > /etc/nginx/nginx.conf
 
 nginx -g "daemon off;"
