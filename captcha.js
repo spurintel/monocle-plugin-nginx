@@ -60,7 +60,7 @@ function validateCaptcha(r) {
             r.return(403, "Blocking access from VPNs");
             return
         }
-        if (r.variables.blockProxies !== "false" && data.anon && data.proxy) {
+        if (r.variables.blockProxies !== "false" && data.anon && data.proxied) {
             r.return(403, "Blocking access from VPNs");
             return
         }
