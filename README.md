@@ -19,8 +19,11 @@ support@spur.us
 
 ### Installation
 
-1. docker pull spurintelligence/mclproxy:latest
-2. docker run -d --name mclproxy -e PROXY_PASS={proxy pass location} -e SITE_TOKEN={site token from spur} -e VERIFY_TOKEN={verify token from Spur} -e BLOCK_VPNS=true -e BLOCK_PROXIES=true -v {path to fullchain.pem}/etc/ssl/certs/nginx.crt -v {path to privatekey.pem}:/etc/ssl/private/nginx.key -p 0.0.0.0:443:443 spurintelligence/mclproxy:latest
+```
+> docker pull spurintelligence/mclproxy:latest
+
+> docker run -d --name mclproxy -e PROXY_PASS={proxy pass location} -e SITE_TOKEN={site token from spur} -e VERIFY_TOKEN={verify token from Spur} -e BLOCK_VPNS=true -e BLOCK_PROXIES=true -v {path to fullchain.pem}/etc/ssl/certs/nginx.crt -v {path to privatekey.pem}:/etc/ssl/private/nginx.key -p 0.0.0.0:443:443 spurintelligence/mclproxy:latest
+```
 
 Variables to set:
 
