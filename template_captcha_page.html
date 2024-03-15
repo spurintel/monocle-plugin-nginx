@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checking Connection...</title>
@@ -201,9 +202,16 @@
 
                         window.location.href = uri; // Redirect to the home page on success
                     } else {
-                        const connectionStatus = document.getElementById('connectionStatus');
-                        connectionStatus.textContent = 'Captcha validation failed. Please disconnect from any VPNs or proxies and try again.';
-                        connectionStatus.className = 'loading-no-animation'
+                        response.json().then((data) => {
+                            const connectionStatus = document.getElementById('connectionStatus');
+                            if (data.service && data.service !== "") {
+                                connectionStatus.textContent = `Captcha validation failed. Please disconnect from ${data.service}`;
+                            } else {
+                                connectionStatus.textContent = 'Captcha validation failed. Please disconnect from any VPNs or proxies and try again.';
+
+                            }
+                            connectionStatus.className = 'loading-no-animation'
+                        });
                     }
                 })
                 .catch(error => {

@@ -52,23 +52,23 @@ function validateCaptcha(r) {
 
         // Check if the time difference is within 5 seconds
         if (timeDifference > 5) {
-            r.return(403, "Captcha validation failed");
+            r.return(403, JSON.stringify(data));
             return;
             // The time is within 5 seconds, proceed with further logic
         }
         if (r.variables.blockVPNs !== "false" && data.anon && data.vpn) {
-            r.return(403, "Blocking access from VPNs");
+            r.return(403, JSON.stringify(data));
             return
         }
         if (r.variables.blockProxies !== "false" && data.anon && data.proxied) {
-            r.return(403, "Blocking access from VPNs");
+            r.return(403, JSON.stringify(data));
             return
         }
         if (r.variables.testLocalhost !== "false" || data.ip == clientIpAddress) {
             setSecureCookie(r);
             r.return(200);
         } else {
-            r.return(403, "Captcha validation failed");
+            r.return(403, JSON.stringify(data));
         }
     }).catch(error => {
         ngx.log(1, `Error calling third-party API: ${error.message}`);
@@ -143,11 +143,5 @@ function validateCookie(r) {
     return receivedSignature === validSignature;
 }
 
-// Helper function to check captcha response validity
-function captchaResponseIsValid(response) {
-    // Implement your validation logic here
-    // This could involve sending a verification request to your server or a third-party captcha service
-    return true; // Placeholder, replace with actual validation
-}
 
 export default { checkCookieAndCaptcha, validateCaptcha };
