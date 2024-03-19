@@ -14,6 +14,7 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 COPY nginx.conf /etc/nginx/templates/nginx.conf.template
 COPY captcha.js /nginx-scripts/captcha.js
 COPY template_captcha_page.html /templates/captcha_page.html
+COPY denied.html /local-content/
 RUN chmod a+rx /sbin/entrypoint.sh
 
 EXPOSE 80

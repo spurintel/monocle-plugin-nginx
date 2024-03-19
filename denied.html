@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
+<link rel="icon" href="https://spur.us/wp-content/uploads/Spur-Favicon-2.svg" sizes="32x32" />
+<link rel="icon" href="https://spur.us/wp-content/uploads/Spur-Favicon-2.svg" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://spur.us/wp-content/uploads/Spur-Favicon-2.svg" />
+<meta name="msapplication-TileImage" content="https://spur.us/wp-content/uploads/Spur-Favicon-2.svg" />
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Checking Connection...</title>
+    <title>Monocle CAPTCHA Success</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
     <style>
         body,
@@ -25,20 +29,27 @@
             text-decoration: none;
         }
 
-        .logo-cluster {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
         .center-div {
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1rem;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .logo-cluster {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .monocle-logo {
@@ -58,56 +69,10 @@
             a {
                 color: white;
             }
-
-            .terms {
-                color: white;
-            }
         }
 
-        @keyframes dots {
-
-            0%,
-            25% {
-                content: "";
-            }
-
-            50% {
-                content: ".";
-            }
-
-            75% {
-                content: "..";
-            }
-
-            100% {
-                content: "...";
-            }
-        }
-
-        .loading {
-            text-align: left;
-            width: 200px;
-        }
-
-        .loading-no-animation {
-            text-align: left;
-            width: 200px;
-        }
-
-        .terms {
-            margin: 2rem;
-            font-size: 0.8rem;
-            color: #888;
-
-            a {
-                color: #888;
-                text-decoration: underline;
-            }
-        }
-
-        .loading::after {
-            content: "";
-            animation: dots 4s infinite;
+        .github-link {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -155,7 +120,8 @@
                 <div style="font-size: 1.2rem">Monocle</div>
             </div>
         </a>
-        <div class="loading" id="connectionStatus">Testing your connection</div>
+        <div class="loading" id="connectionStatus">Captcha validation failed. Please disconnect from any VPNs or proxies
+            and try again.</div>
         <div class="terms">
             See our
             <a href="https://spur.us/terms/monocle" target="_blank" referrerpolicy="none">Terms</a>
@@ -182,52 +148,10 @@
             .addEventListener("change", (e) => {
                 updateTheme();
             });
-    </script>
-    <script src="https://mcl.spur.us/d/mcl.js?tk={SITE_TOKEN}">
-    </script>
-    <script>
-        // Function to handle the captcha data submission
-        function submitCaptchaData(data) {
-            fetch('/validate_captcha', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ captchaData: data }),
-            })
-                .then(response => {
-                    if (response.ok) {
-                        var urlParams = new URLSearchParams(window.location.search);
-                        var uri = urlParams.get('uri');
-
-                        window.location.href = uri; // Redirect to the home page on success
-                    } else {
-                        response.json().then((data) => {
-                            window.location.href = `/denied?service=${data.service}`;
-                            connectionStatus.className = 'loading-no-animation'
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during captcha validation:', error);
-                    alert('An error occurred. Please try again.');
-                });
-        }
-
-
-
-        // Initialize or reset the submission flag when appropriate
-        // window.bundleSubmitted = false;
-
-        if (window.MCL) {
-            MCL.configure({
-                onBundle: function (b) {
-                    submitCaptchaData(b);
-                }
-            })
-        } else {
-            console.error('MCL script not loaded');
-            alert('Captcha loading failed. Please refresh the page.');
+        var urlParams = new URLSearchParams(window.location.search);
+        var service = urlParams.get('service');
+        if (service && service !== "") {
+            connectionStatus.textContent = `Captcha validation failed. Please disconnect from ${service}`;
         }
     </script>
 </body>
