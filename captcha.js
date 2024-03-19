@@ -19,7 +19,23 @@ function checkCookieAndCaptcha(r) {
 
 }
 
+function checkXForwardedFor(r, ip) {
+    // Get the X-Forwarded-For header value
+    let xffHeader = r.headersIn['X-Forwarded-For'];
+    if (xffHeader) {
+        // Split the header value by comma to handle multiple IPs
+        let ips = xffHeader.split(',');
 
+        // Trim whitespace and check if the target IP is in the list
+        for (let i = 0; i < ips.length; i++) {
+            if (ips[i].trim() === ip) {
+                return true; // IP found in the X-Forwarded-For header
+            }
+        }
+    }
+
+    return false; // IP not found in the X-Forwarded-For header
+}
 
 function validateCaptcha(r) {
     // Define the URL of the third-party API
@@ -58,14 +74,14 @@ function validateCaptcha(r) {
         }
         if (r.variables.blockVPNs !== "false" && data.anon && data.vpn) {
             r.return(403, JSON.stringify(data));
-            return
+            return;
         }
         if (r.variables.blockProxies !== "false" && data.anon && data.proxied) {
             r.return(403, JSON.stringify(data));
-            return
+            return;
         }
-        if (r.variables.testLocalhost !== "false" || data.ip == clientIpAddress) {
-            setSecureCookie(r);
+        if (r.variables.testLocalhost !== "false" || data.ip == clientIpAddress || (r.variables.checkXForwardedFor !== "false" && checkXForwardedFor(r, data.ip))) {
+            setSecureCookie(data.ip, r);
             r.return(200);
         } else {
             r.return(403, JSON.stringify(data));
@@ -77,8 +93,8 @@ function validateCaptcha(r) {
 }
 
 
-function setSecureCookie(r) {
-    var cookieValue = r.remoteAddress;
+function setSecureCookie(ip, r) {
+    let cookieValue = ip;
     var expiryTime = Math.floor(Date.now() / 1000) + 3600; // Current time in seconds since the epoch plus 3600 seconds (1 hour)
     var cookiePayload = `${cookieValue}|${expiryTime}`;
 
@@ -124,7 +140,7 @@ function validateCookie(r) {
         return false;
     }
     var cookieValue = payloadParts[0];
-    if (cookieValue != r.remoteAddress) {
+    if (r.variables.testLocalhost === "false" && r.remoteAddress != cookieValue && (r.variables.checkXForwardedFor === "false" || !checkXForwardedFor(r, cookieValue))) {
         ngx.log(1, `Does not match remote address ${cookieValue} ${r.remoteAddress}`);
         return false;
     }

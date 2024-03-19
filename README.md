@@ -40,6 +40,8 @@ Variables to set:
     * By default, we do not block anything. Set this to block all proxies whether they are datacenter, residential, mobile, or malware.
 6. `RESOLVER`
     * By default, this is set to `1.1.1.1`. However, if you plan to include this within a docker network, you will need to set it to the local docker resolver. On `mclproxy.com`, this is set to `127.0.0.11`.
+7. `CHECK_XFORWARDED_FOR`
+    * By default, this is set to false. Set this to `true` if you want to verify the captcha bundle IP address against the x-forwarded-for headers. This reduces security; however, some environments will require it. For instance, deploying this in Google Cloud Run.
 
 Specifying certificates is completely optional. If you do not specify certificates, NGINX will start on port 80 and serve insecure traffic. Adjust the port you use accordingly.
 

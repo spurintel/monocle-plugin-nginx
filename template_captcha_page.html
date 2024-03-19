@@ -203,7 +203,7 @@
                         window.location.href = uri; // Redirect to the home page on success
                     } else {
                         response.json().then((data) => {
-                            window.location.href = `/denied?service=${data.service}`;
+                            window.location.href = `/denied?service=${data && data.service ? data.service : ""}`;
                             connectionStatus.className = 'loading-no-animation'
                         });
                     }
